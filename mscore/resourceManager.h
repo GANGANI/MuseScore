@@ -38,7 +38,8 @@ private:
 
 public slots:
     void download();
-   };
+
+};
 
 }
 #endif // RESOURCE_H

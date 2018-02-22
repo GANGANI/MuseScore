@@ -19,7 +19,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-QT -= gui
+QT -= gui sql
 TARGET = bww2mxml
 CONFIG += console
 CONFIG -= app_bundle

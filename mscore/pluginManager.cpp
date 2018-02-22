@@ -14,6 +14,8 @@
 #include "pluginManager.h"
 #include "shortcutcapturedialog.h"
 #include "musescore.h"
+#include <QDesktopServices>
+#include <QUrl>
 
 namespace Ms {
 
@@ -31,6 +33,7 @@ PluginManager::PluginManager(QWidget* parent)
       connect(clearPluginShortcut, SIGNAL(clicked()), SLOT(clearPluginShortcutClicked()));
       connect(reloadPlugins, SIGNAL(clicked()), SLOT(reloadPluginsClicked()));
       readSettings();
+
       }
 
 //---------------------------------------------------------
@@ -244,6 +247,15 @@ void PluginManager::readSettings()
       {
       MuseScore::restoreGeometry(this);
       }
-
 }
 
+void Ms::PluginManager::on_pushButton_clicked()
+{
+    connOpen();
+}
+
+void Ms::PluginManager::on_pushButton_2_clicked()
+{
+    QString link = "http://localhost//MuseScore_Web_Service-master//Login.php";
+    QDesktopServices::openUrl(QUrl(link));
+}

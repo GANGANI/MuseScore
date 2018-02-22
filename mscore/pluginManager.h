@@ -16,6 +16,8 @@
 
 #include "ui_pluginManager.h"
 #include "preferences.h"
+#include <QtSql>
+#include <QtDebug>
 
 namespace Ms {
 
@@ -38,6 +40,28 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       virtual void closeEvent(QCloseEvent*);
       virtual void accept();
 
+   public:
+      QSqlDatabase db;
+      void connClose(){
+          db.close();
+          db.removeDatabase(QSqlDatabase::defaultConnection);
+      }
+      bool connOpen(){
+          db = QSqlDatabase::addDatabase("QMYSQL");
+          db.setHostName("localhost");
+          db.setUserName("root");
+          db.setPassword("");
+          db.setDatabaseName("plugin_manager");
+          db.open();
+
+          if (!db.open())
+              qDebug()<<("Faild");
+          else
+              qDebug()<<("Connected");
+          return (db.open());
+      }
+
+
    private slots:
       void definePluginShortcutClicked();
       void clearPluginShortcutClicked();
@@ -45,7 +69,11 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       void pluginLoadToggled(QListWidgetItem*);
       void reloadPluginsClicked();
 
-   signals:
+      void on_pushButton_clicked();
+
+      void on_pushButton_2_clicked();
+
+signals:
       void closed(bool);
 
    public:

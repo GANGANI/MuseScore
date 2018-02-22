@@ -223,3 +223,5 @@ void ResourceManager::hideEvent(QHideEvent* event)
 
 }
 
+
+
