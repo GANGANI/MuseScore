@@ -17,6 +17,10 @@
 #include <QDesktopServices>
 #include <QUrl>
 
+
+#include <iostream>
+
+
 namespace Ms {
 
 //---------------------------------------------------------
@@ -29,11 +33,10 @@ PluginManager::PluginManager(QWidget* parent)
       setObjectName("PluginManager");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-      connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
-      connect(clearPluginShortcut, SIGNAL(clicked()), SLOT(clearPluginShortcutClicked()));
-      connect(reloadPlugins, SIGNAL(clicked()), SLOT(reloadPluginsClicked()));
+      //connect(definePluginShortcut, SIGNAL(clicked()), SLOT(definePluginShortcutClicked()));
+      //connect(clearPluginShortcut, SIGNAL(clicked()), SLOT(clearPluginShortcutClicked()));
+      //connect(reloadPlugins, SIGNAL(clicked()), SLOT(reloadPluginsClicked()));
       readSettings();
-
       }
 
 //---------------------------------------------------------
@@ -87,13 +90,20 @@ void PluginManager::loadList(bool forceRefresh)
             item->setFlags(item->flags() | Qt::ItemIsEnabled);
             item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
             item->setData(Qt::UserRole, i);
+
+            QListWidgetItem* item2 = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  allPlugins);
+            item2->setFlags(item->flags() | Qt::ItemIsEnabled);
+            //item2->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
+            item2->setData(Qt::UserRole, i);
             }
+
       prefs = preferences;
       if (n) {
             pluginList->setCurrentRow(0);
             pluginListItemChanged(pluginList->item(0), 0);
             }
       }
+
 
 //---------------------------------------------------------
 //   apply
@@ -147,11 +157,27 @@ void PluginManager::pluginListItemChanged(QListWidgetItem* item, QListWidgetItem
             return;
       int idx = item->data(Qt::UserRole).toInt();
       const PluginDescription& d = prefs.pluginList[idx];
+
       QFileInfo fi(d.path);
       pluginName->setText(fi.completeBaseName());
       pluginPath->setText(fi.absolutePath());
       pluginVersion->setText(d.version);
-      pluginShortcut->setText(d.shortcut.keysToString());
+      //pluginShortcut->setText(d.shortcut.keysToString());
+      pluginDescription->setText(d.description);
+      }
+
+void PluginManager::allPluginsItemChanged(QListWidgetItem* item, QListWidgetItem*)
+      {
+      if (!item)
+            return;
+      int idx = item->data(Qt::UserRole).toInt();
+      const PluginDescription& d = prefs.pluginList[idx];
+
+      QFileInfo fi(d.path);
+      pluginName->setText(fi.completeBaseName());
+      pluginPath->setText(fi.absolutePath());
+      pluginVersion->setText(d.version);
+      //pluginShortcut->setText(d.shortcut.keysToString());
       pluginDescription->setText(d.description);
       }
 
@@ -171,7 +197,7 @@ void PluginManager::pluginLoadToggled(QListWidgetItem* item)
 //   definePluginShortcutClicked
 //---------------------------------------------------------
 
-void PluginManager::definePluginShortcutClicked()
+/**void PluginManager::definePluginShortcutClicked()
       {
       QListWidgetItem* item = pluginList->currentItem();
       if (!item)
@@ -224,11 +250,11 @@ void PluginManager::clearPluginShortcutClicked()
 
       QAction* action = s->action();
       action->setShortcuts(s->keys());
-//      mscore->addAction(action);
+//    mscore->addAction(action);
 
       pluginShortcut->setText(s->keysToString());
       prefs.dirty = true;
-      }
+      }**/
 
 //---------------------------------------------------------
 //   writeSettings
@@ -247,15 +273,25 @@ void PluginManager::readSettings()
       {
       MuseScore::restoreGeometry(this);
       }
-}
+
 
 void Ms::PluginManager::on_pushButton_clicked()
 {
-    connOpen();
+    //connOpen();
 }
 
 void Ms::PluginManager::on_pushButton_2_clicked()
 {
     QString link = "http://localhost//MuseScore_Web_Service-master//Login.php";
     QDesktopServices::openUrl(QUrl(link));
+}
+}
+
+
+void Ms::PluginManager::on_AutoUpdate_btn_clicked()
+{
+    //QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  pluginList);
+    //item->setFlags(item->flags() | Qt::ItemIsEnabled);
+    //item->setCheckState(true);
+    //item->setData(Qt::UserRole, i);
 }

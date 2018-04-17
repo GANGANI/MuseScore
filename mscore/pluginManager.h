@@ -40,8 +40,11 @@ class PluginManager : public QDialog, public Ui::PluginManager {
       virtual void closeEvent(QCloseEvent*);
       virtual void accept();
 
+   private:
+      void FillTable();
+
    public:
-      QSqlDatabase db;
+      /**QSqlDatabase db;
       void connClose(){
           db.close();
           db.removeDatabase(QSqlDatabase::defaultConnection);
@@ -59,19 +62,25 @@ class PluginManager : public QDialog, public Ui::PluginManager {
           else
               qDebug()<<("Connected");
           return (db.open());
-      }
+      }**/
 
 
    private slots:
       void definePluginShortcutClicked();
       void clearPluginShortcutClicked();
       void pluginListItemChanged(QListWidgetItem*, QListWidgetItem*);
+      void allPluginsItemChanged(QListWidgetItem*, QListWidgetItem*);
       void pluginLoadToggled(QListWidgetItem*);
       void reloadPluginsClicked();
 
       void on_pushButton_clicked();
 
       void on_pushButton_2_clicked();
+
+
+      void on_pushButton_3_clicked();
+
+      void on_AutoUpdate_btn_clicked();
 
 signals:
       void closed(bool);

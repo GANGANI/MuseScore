@@ -35,3 +35,7 @@ HEADERS += lexer.h \
     parser.h \
     symbols.h \
     writer.h
+unix:!macx: LIBS += -L$$PWD/../Downloads/connector/lib/ -lmysqlclient
+
+INCLUDEPATH += $$PWD/../Downloads/connector/include
+DEPENDPATH += $$PWD/../Downloads/connector/include

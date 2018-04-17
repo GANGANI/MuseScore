@@ -1963,6 +1963,7 @@ static void updatePluginList(QList<QString>& pluginPathList, const QString& plug
       }
 #endif
 
+
 void Preferences::updatePluginList(bool forceRefresh)
       {
 #ifdef SCRIPT_INTERFACE
@@ -1991,6 +1992,10 @@ void Preferences::updatePluginList(bool forceRefresh)
             }
 #endif
       }
+
+
+
+
 
 //---------------------------------------------------------
 //   printShortcutsClicked
