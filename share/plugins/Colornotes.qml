@@ -16,7 +16,7 @@ import QtQuick 2.2
 import MuseScore 3.0
 
 MuseScore {
-      version:  "1.1"
+      version:  "1.0"
       description: qsTr("This plugin colors notes in the selection depending on their pitch as per the Boomwhackers convention")
       menuPath: "Plugins.Notes.Color Notes"
 
@@ -75,15 +75,15 @@ MuseScore {
                               cursor.rewind(0) // if no selection, beginning of score
 
                         while (cursor.segment() && (fullScore || cursor.tick < endTick)) {
-                              if (cursor.element() && cursor.element().type === Ms.CHORD) {
-                                    var graceChords = cursor.element().graceNotes;
+                              if (cursor.element() && cursor.element.type === Element.CHORD) {
+                                    var graceChords = cursor.element.graceNotes;
                                     for (var i = 0; i < graceChords.length; i++) {
                                           // iterate through all grace chords
                                           var graceNotes = graceChords[i].notes;
                                           for (var j = 0; j < graceNotes.length; j++)
                                                 func(graceNotes[j]);
                                     }
-                                    var notes = cursor.element().notes;
+                                    var notes = cursor.element.notes;
                                     for (var k = 0; k < notes.length; k++) {
                                           var note = notes[k];
                                           func(note);
@@ -96,19 +96,24 @@ MuseScore {
       }
 
       function colorNote(note) {
-            var pitch = note.get("pitch");
-            var color = note.get("color");
-            var newcolor;
-            if (color == black)
-                  newcolor = colors[pitch % 12];
+            if (note.color == black)
+                  note.color = colors[note.pitch % 12];
             else
-                  newcolor = black;
+                  note.color = black;
 
-            note.set("color", newcolor);
-            if (note.accidental) note.accidental.set("color",newcolor);
+            if (note.accidental) {
+                  if (note.accidental.color == black)
+                        note.accidental.color = colors[note.pitch % 12];
+                  else
+                        note.accidental.color = black;
+                  }
+
             for (var i = 0; i < note.dots.length; i++) {
                   if (note.dots[i]) {
-                        note.dots[i].set("color",newcolor);
+                        if (note.dots[i].color == black)
+                              note.dots[i].color = colors[note.pitch % 12];
+                        else
+                              note.dots[i].color = black;
                         }
                   }
          }

@@ -1,3 +1,4 @@
+
 //=============================================================================
 //  MuseScore
 //  Music Composition & Notation
@@ -33,7 +34,7 @@ MuseScore {
             while (cursor.segment()) {
                 var e = cursor.element();
                 if (e) {
-	              console.log("type: " + e.name + " (" + e.type + ") at  tick: " + e.tick + " color " + e.get("color"));
+                  console.log("type: " + e.name + " (" + e.type + ") at  tick: " + e.tick + " color " + e.get("color"));
                     if (e.type == Ms.REST) {
                         var d = e.get("duration");
                         console.log("   duration " + d.numerator + "/" + d.denominator);
@@ -44,3 +45,4 @@ MuseScore {
             Qt.quit();
             }
       }
+

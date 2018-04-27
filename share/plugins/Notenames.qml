@@ -15,7 +15,7 @@
 //=============================================================================
 
 import QtQuick 2.0
-import MuseScore 1.0
+import MuseScore 3.0
 
 MuseScore {
    version: "2.0"
@@ -124,7 +124,7 @@ MuseScore {
       var endTick;
       var fullScore = false;
       cursor.rewind(1);
-      if (!cursor.segment) { // no selection
+      if (!cursor.segment()) { // no selection
          fullScore = true;
          startStaff = 0; // start with 1st staff
          endStaff  = curScore.nstaves - 1; // and end with last
@@ -153,8 +153,8 @@ MuseScore {
             if (fullScore)  // no selection
                cursor.rewind(0); // beginning of score
 
-            while (cursor.segment && (fullScore || cursor.tick < endTick)) {
-               if (cursor.element && cursor.element.type === Element.CHORD) {
+            while (cursor.segment() && (fullScore || cursor.tick < endTick)) {
+               if (cursor.element() && cursor.element.type === Element.CHORD) {
                   var text = newElement(Element.STAFF_TEXT);
 
                   var graceChords = cursor.element.graceNotes;
@@ -197,3 +197,4 @@ MuseScore {
       Qt.quit();
    } // end onRun
 }
+

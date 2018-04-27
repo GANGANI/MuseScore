@@ -17,9 +17,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 
-
 #include <iostream>
-
 
 namespace Ms {
 
@@ -37,6 +35,33 @@ PluginManager::PluginManager(QWidget* parent)
       //connect(clearPluginShortcut, SIGNAL(clicked()), SLOT(clearPluginShortcutClicked()));
       //connect(reloadPlugins, SIGNAL(clicked()), SLOT(reloadPluginsClicked()));
       readSettings();
+      createListWidget();
+      this->comboBox->addItem("OFF");
+      this->comboBox->addItem("ON");
+
+      all->addItem(new QListWidgetItem("ABC_import"));
+      all->addItem(new QListWidgetItem("Colornotes"));
+      all->addItem(new QListWidgetItem("Createscore"));
+      all->addItem(new QListWidgetItem("Notenames"));
+      all->addItem(new QListWidgetItem("Random"));
+      all->addItem(new QListWidgetItem("Random2"));
+      all->addItem(new QListWidgetItem("run"));
+      all->addItem(new QListWidgetItem("Scorelist"));
+      all->addItem(new QListWidgetItem("Walk"));
+      /**QString searchText = this->SearchText->text();
+      int listWidgetSize = this->allPlugins->count();
+
+      for (int k1 = 0; k1 < listWidgetSize; k1++)
+          {
+          if (this->allPlugins->item(k1)->text().startsWith(searchText))
+          {
+               this->allPlugins->item(k1)->setHidden(false);
+          }
+          else
+          {
+               this->allPlugins->item(k1)->setHidden(true);
+          }
+      }**/
       }
 
 //---------------------------------------------------------
@@ -57,6 +82,8 @@ void PluginManager::init()
       shortcutsChanged = false;
       loadList(false);
       connect(pluginList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
+      connect(allPlugins, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
+      //connect(systemPlugins, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(pluginLoadToggled(QListWidgetItem*)));
       connect(pluginList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
          SLOT(pluginListItemChanged(QListWidgetItem*, QListWidgetItem*)));
       }
@@ -81,6 +108,7 @@ void PluginManager::loadList(bool forceRefresh)
       preferences.updatePluginList(forceRefresh);
       n = preferences.pluginList.size();
       pluginList->clear();
+      allPlugins->clear();
       for (int i = 0; i < n; ++i) {
             PluginDescription& d = preferences.pluginList[i];
             Shortcut* s = &d.shortcut;
@@ -90,20 +118,30 @@ void PluginManager::loadList(bool forceRefresh)
             item->setFlags(item->flags() | Qt::ItemIsEnabled);
             item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
             item->setData(Qt::UserRole, i);
-
             QListWidgetItem* item2 = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  allPlugins);
-            item2->setFlags(item->flags() | Qt::ItemIsEnabled);
-            //item2->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
-            item2->setData(Qt::UserRole, i);
-            }
 
+            /**if(QFileInfo(d.path).completeBaseName()!="ABC_import" && QFileInfo(d.path).completeBaseName()!="Colornotes" && QFileInfo(d.path).completeBaseName()!="Createscore" && QFileInfo(d.path).completeBaseName()!="Notenames"&& QFileInfo(d.path).completeBaseName()!="run" && QFileInfo(d.path).completeBaseName()!="Scorelist" && QFileInfo(d.path).completeBaseName()!="Walk" && QFileInfo(d.path).completeBaseName()!="Panel" && QFileInfo(d.path).completeBaseName()!="Random" && QFileInfo(d.path).completeBaseName()!="view" && QFileInfo(d.path).completeBaseName()!="Random2"){
+                QListWidgetItem* item2 = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  allPlugins);
+                item2->setFlags(item2->flags() | Qt::ItemIsEnabled);
+                item2->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
+                item2->setData(Qt::UserRole, i);
+            }**/
+            //QListWidgetItem* item3 = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  systemPlugins);
+            //systemPlugins->padd1->setData(Qt::UserRole).toInt();
+            //QListWidgetItem* item3 = new QListWidgetItem(createListWidget(),  systemPlugins);
+       }
+
+
+
+
+      //systemPlugins->addItem(new QListWidgetItem("item2"));
+      //systemPlugins->addItem(new QListWidgetItem("item3"));
       prefs = preferences;
       if (n) {
             pluginList->setCurrentRow(0);
             pluginListItemChanged(pluginList->item(0), 0);
             }
       }
-
 
 //---------------------------------------------------------
 //   apply
@@ -157,7 +195,6 @@ void PluginManager::pluginListItemChanged(QListWidgetItem* item, QListWidgetItem
             return;
       int idx = item->data(Qt::UserRole).toInt();
       const PluginDescription& d = prefs.pluginList[idx];
-
       QFileInfo fi(d.path);
       pluginName->setText(fi.completeBaseName());
       pluginPath->setText(fi.absolutePath());
@@ -165,31 +202,29 @@ void PluginManager::pluginListItemChanged(QListWidgetItem* item, QListWidgetItem
       //pluginShortcut->setText(d.shortcut.keysToString());
       pluginDescription->setText(d.description);
       }
-
-void PluginManager::allPluginsItemChanged(QListWidgetItem* item, QListWidgetItem*)
-      {
-      if (!item)
-            return;
-      int idx = item->data(Qt::UserRole).toInt();
-      const PluginDescription& d = prefs.pluginList[idx];
-
-      QFileInfo fi(d.path);
-      pluginName->setText(fi.completeBaseName());
-      pluginPath->setText(fi.absolutePath());
-      pluginVersion->setText(d.version);
-      //pluginShortcut->setText(d.shortcut.keysToString());
-      pluginDescription->setText(d.description);
-      }
-
+void PluginManager::installed(QListWidgetItem *item){
+    if(item->checkState() == Qt::Checked)
+        item->setBackgroundColor(QColor("#ffffb2"));
+}
 //---------------------------------------------------------
 //   pluginLoadToggled
 //---------------------------------------------------------
+
+void PluginManager::createListWidget(){
+    //systemPlugins = new QListWidget;
+    QStringList strList;
+    strList << "monitor" << "mouse" << "keyboard" << "hard disk drive"
+            << "graphic card" << "sound card" << "memory" << "motherboard";
+
+    //systemPlugins->addItems(strList);
+}
 
 void PluginManager::pluginLoadToggled(QListWidgetItem* item)
       {
       int idx = item->data(Qt::UserRole).toInt();
       PluginDescription* d = &prefs.pluginList[idx];
       d->load = (item->checkState() == Qt::Checked);
+      //allPlugins.append(item);
       prefs.dirty = true;
       }
 
@@ -197,7 +232,7 @@ void PluginManager::pluginLoadToggled(QListWidgetItem* item)
 //   definePluginShortcutClicked
 //---------------------------------------------------------
 
-/**void PluginManager::definePluginShortcutClicked()
+void PluginManager::definePluginShortcutClicked()
       {
       QListWidgetItem* item = pluginList->currentItem();
       if (!item)
@@ -217,7 +252,7 @@ void PluginManager::pluginLoadToggled(QListWidgetItem* item)
       action->setShortcuts(s->keys());
       mscore->addAction(action);
 
-      pluginShortcut->setText(s->keysToString());
+      //pluginShortcut->setText(s->keysToString());
       prefs.dirty = true;
       }
 
@@ -252,9 +287,9 @@ void PluginManager::clearPluginShortcutClicked()
       action->setShortcuts(s->keys());
 //    mscore->addAction(action);
 
-      pluginShortcut->setText(s->keysToString());
+      //pluginShortcut->setText(s->keysToString());
       prefs.dirty = true;
-      }**/
+      }
 
 //---------------------------------------------------------
 //   writeSettings
@@ -274,24 +309,27 @@ void PluginManager::readSettings()
       MuseScore::restoreGeometry(this);
       }
 
-
-void Ms::PluginManager::on_pushButton_clicked()
-{
-    //connOpen();
 }
 
 void Ms::PluginManager::on_pushButton_2_clicked()
 {
-    QString link = "http://localhost//MuseScore_Web_Service-master//Login.php";
+    QString link = "http://localhost/OnlinePluginStore/src/Login.php";
     QDesktopServices::openUrl(QUrl(link));
 }
-}
 
 
-void Ms::PluginManager::on_AutoUpdate_btn_clicked()
+void Ms::PluginManager::on_comboBox_activated(const QString &arg1)
 {
-    //QListWidgetItem* item = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  pluginList);
-    //item->setFlags(item->flags() | Qt::ItemIsEnabled);
-    //item->setCheckState(true);
-    //item->setData(Qt::UserRole, i);
+    if (comboBox->currentText()== "ON"){
+        qDebug() << "ON";
+        int n = prefs.pluginList.size();
+        for (int i = 0; i < n; ++i) {
+              PluginDescription& d = prefs.pluginList[i];
+              if (d.load)
+                    mscore->registerPlugin(&d);
+              else
+                    mscore->unregisterPlugin(&d);
+              }
+    }
 }
+

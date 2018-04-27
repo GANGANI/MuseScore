@@ -1,5 +1,5 @@
 import QtQuick 2.1
-import MuseScore 1.0
+import MuseScore 3.0
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 

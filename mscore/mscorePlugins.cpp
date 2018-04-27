@@ -63,7 +63,7 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
       if (np.suffix() != "qml")
             return;
       QString baseName = np.completeBaseName();
-
+      //QString baseVersion = np.completeBaseVersion();
       foreach(QString s, plugins) {
             QFileInfo fi(s);
             if (fi.completeBaseName() == baseName) {
@@ -314,6 +314,12 @@ void MuseScore::removeMenuEntry(PluginDescription* plugin)
                         }
             cm = menu;
             }
+      QString allml = ml.join(", ");
+      qDebug() << allml << "heY"<<ml[0];
+
+      QString allsl = sl.join(", ");
+      qDebug() << allsl << "hello"<<sl[0];
+
       }
 
 //---------------------------------------------------------

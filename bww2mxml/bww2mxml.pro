@@ -20,6 +20,8 @@
 #=============================================================================
 
 QT -= gui sql
+QT += qml quick
+QT += quick
 TARGET = bww2mxml
 CONFIG += console
 CONFIG -= app_bundle

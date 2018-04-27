@@ -20,8 +20,8 @@
 import QtQuick 2.1
 import QtQuick.Dialogs 1.0
 import QtQuick.Controls 1.0
-import MuseScore 1.0
-import FileIO 1.0
+import MuseScore 3.0
+import FileIO 3.0
 
 MuseScore {
     menuPath: "Plugins.ABC Import"
@@ -141,3 +141,5 @@ MuseScore {
             }
         }
     }
+
+
