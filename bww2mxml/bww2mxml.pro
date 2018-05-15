@@ -24,6 +24,7 @@ QT += qml quick
 QT += quick
 TARGET = bww2mxml
 CONFIG += console
+CONFIG+=qml_debug
 CONFIG -= app_bundle
 TEMPLATE = app
 SOURCES += lexer.cpp \

@@ -227,7 +227,7 @@ QTabBar::tab:selected {
      </property>
      <widget class="QWidget" name="Installed">
       <attribute name="title">
-       <string>Installed</string>
+       <string>System plugins</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>

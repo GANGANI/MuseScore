@@ -119,16 +119,7 @@ void PluginManager::loadList(bool forceRefresh)
             item->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
             item->setData(Qt::UserRole, i);
             QListWidgetItem* item2 = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  allPlugins);
-
-            /**if(QFileInfo(d.path).completeBaseName()!="ABC_import" && QFileInfo(d.path).completeBaseName()!="Colornotes" && QFileInfo(d.path).completeBaseName()!="Createscore" && QFileInfo(d.path).completeBaseName()!="Notenames"&& QFileInfo(d.path).completeBaseName()!="run" && QFileInfo(d.path).completeBaseName()!="Scorelist" && QFileInfo(d.path).completeBaseName()!="Walk" && QFileInfo(d.path).completeBaseName()!="Panel" && QFileInfo(d.path).completeBaseName()!="Random" && QFileInfo(d.path).completeBaseName()!="view" && QFileInfo(d.path).completeBaseName()!="Random2"){
-                QListWidgetItem* item2 = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  allPlugins);
-                item2->setFlags(item2->flags() | Qt::ItemIsEnabled);
-                item2->setCheckState(d.load ? Qt::Checked : Qt::Unchecked);
-                item2->setData(Qt::UserRole, i);
-            }**/
-            //QListWidgetItem* item3 = new QListWidgetItem(QFileInfo(d.path).completeBaseName(),  systemPlugins);
-            //systemPlugins->padd1->setData(Qt::UserRole).toInt();
-            //QListWidgetItem* item3 = new QListWidgetItem(createListWidget(),  systemPlugins);
+            item2->setFlags(item2->flags() | Qt::ItemIsEnabled);
        }
 
 
@@ -142,7 +133,13 @@ void PluginManager::loadList(bool forceRefresh)
             pluginListItemChanged(pluginList->item(0), 0);
             }
       }
-
+/**void PluginManager::on_installedPlugins_itemChanged(QListWidgetItem* changed)
+{
+    bool checked = changed->checkState() == Qt::Checked;
+    int index = 0;
+    for (; pluginList->item(index) != changed; index++) ;
+    QMessageBox::information(NULL,"Clicked", "You " + QString(checked ? "checked" : "unchecked") + " item " + QString::number(index + 1) + ".");
+}**/
 //---------------------------------------------------------
 //   apply
 //---------------------------------------------------------
@@ -201,6 +198,8 @@ void PluginManager::pluginListItemChanged(QListWidgetItem* item, QListWidgetItem
       pluginVersion->setText(d.version);
       //pluginShortcut->setText(d.shortcut.keysToString());
       pluginDescription->setText(d.description);
+
+
       }
 void PluginManager::installed(QListWidgetItem *item){
     if(item->checkState() == Qt::Checked)
@@ -224,7 +223,9 @@ void PluginManager::pluginLoadToggled(QListWidgetItem* item)
       int idx = item->data(Qt::UserRole).toInt();
       PluginDescription* d = &prefs.pluginList[idx];
       d->load = (item->checkState() == Qt::Checked);
-      //allPlugins.append(item);
+      /**for (; pluginList->item(index) != changed; index++) ;
+
+      //allPlugins.append(item);**/
       prefs.dirty = true;
       }
 
@@ -313,12 +314,12 @@ void PluginManager::readSettings()
 
 void Ms::PluginManager::on_pushButton_2_clicked()
 {
-    QString link = "http://localhost/OnlinePluginStore/src/Login.php";
+    QString link = "https://musescoreonlinepluginstore.000webhostapp.com/src/Login.php";
     QDesktopServices::openUrl(QUrl(link));
 }
 
 
-void Ms::PluginManager::on_comboBox_activated(const QString &arg1)
+void Ms::PluginManager::on_comboBox_activated(const QString)
 {
     if (comboBox->currentText()== "ON"){
         qDebug() << "ON";
