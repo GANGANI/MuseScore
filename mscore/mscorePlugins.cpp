@@ -58,6 +58,7 @@ namespace Ms {
 
 void MuseScore::registerPlugin(PluginDescription* plugin)
       {
+    //register plugin
       QString pluginPath = plugin->path;
       QFileInfo np(pluginPath);
       if (np.suffix() != "qml")
@@ -124,6 +125,8 @@ void MuseScore::registerPlugin(PluginDescription* plugin)
 
 void MuseScore::unregisterPlugin(PluginDescription* plugin)
       {
+
+    //unregister plugins
       QString pluginPath = plugin->path;
       QFileInfo np(pluginPath);
       if (np.suffix() != "qml")
@@ -162,6 +165,7 @@ void MuseScore::unregisterPlugin(PluginDescription* plugin)
 
 void MuseScore::createMenuEntry(PluginDescription* plugin)
       {
+    //create menu entry to the installed plugins
       if (!pluginMapper)
             return;
 
@@ -252,6 +256,8 @@ void MuseScore::createMenuEntry(PluginDescription* plugin)
 
 void MuseScore::removeMenuEntry(PluginDescription* plugin)
       {
+
+    //remove menu entry when uninstall the plugin
       if (!pluginMapper)
             return;
 
@@ -327,6 +333,9 @@ void MuseScore::removeMenuEntry(PluginDescription* plugin)
 //---------------------------------------------------------
 
 int MuseScore::pluginIdxFromPath(QString pluginPath) {
+
+    //get plugin path
+
       QFileInfo np(pluginPath);
       QString baseName = np.completeBaseName();
       int idx = 0;
@@ -345,6 +354,8 @@ int MuseScore::pluginIdxFromPath(QString pluginPath) {
 
 void MuseScore::loadPlugins()
       {
+
+    //load plugin list
       pluginMapper = new QSignalMapper(this);
       connect(pluginMapper, SIGNAL(mapped(int)), SLOT(pluginTriggered(int)));
       for (int i = 0; i < preferences.pluginList.size(); ++i) {
@@ -371,6 +382,7 @@ void MuseScore::unloadPlugins()
 
 bool MuseScore::loadPlugin(const QString& filename)
       {
+    //load plugin when installing the plugin
       bool result = false;
 
       if (!pluginMapper) {
@@ -476,6 +488,8 @@ void MuseScore::pluginTriggered(int idx)
 
 void collectPluginMetaInformation(PluginDescription* d)
       {
+    //collect plugin details from qml file
+
       qDebug("Collect meta for <%s>", qPrintable(d->path));
 
       QQmlComponent component(Ms::MScore::qml(), QUrl::fromLocalFile(d->path));

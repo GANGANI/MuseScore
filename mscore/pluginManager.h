@@ -43,58 +43,18 @@ class PluginManager : public QDialog, public Ui::PluginManager {
    private:
       void FillTable();
 
-   public:
-      /**QSqlDatabase db;
-      void connClose(){
-          db.close();
-          db.removeDatabase(QSqlDatabase::defaultConnection);
-      }
-      bool connOpen(){
-          db = QSqlDatabase::addDatabase("QMYSQL");
-          db.setHostName("localhost");
-          db.setUserName("root");
-          db.setPassword("");
-          db.setDatabaseName("plugin_manager");
-          db.open();
-
-          if (!db.open())
-              qDebug()<<("Faild");
-          else
-              qDebug()<<("Connected");
-          return (db.open());
-      }**/
 
 
    private slots:
-      void definePluginShortcutClicked();
-      void clearPluginShortcutClicked();
+
       void pluginListItemChanged(QListWidgetItem*, QListWidgetItem*);
-      //void allPluginsItemChanged(QListWidgetItem*, QListWidgetItem*);
       void installed(QListWidgetItem *item);
       void pluginLoadToggled(QListWidgetItem*);
       void reloadPluginsClicked();
 
-      //void on_pushButton_clicked();
-
-      //void on_pushButton_3_clicked();
-
-
-
-      //void on_radioButton_clicked();
-
-      //void on_allPlugins_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
-      //void on_pluginList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
-      //void on_Login_PluginStore_clicked();
-
       void on_pushButton_2_clicked();
       void createListWidget();
-      //void on_comboBox_currentIndexChanged(int index);
 
-      //void on_comboBox_currentIndexChanged(const QString &arg1);
-
-      void on_comboBox_activated(const QString);
 
 signals:
       void closed(bool);
